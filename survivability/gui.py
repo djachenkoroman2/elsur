@@ -24,34 +24,37 @@ import sys
 from pathlib import Path
 
 try:  # PyQt6 — основная зависимость (requirements.txt)
-    from PyQt6.QtCore import (QBuffer, QByteArray, QIODevice, QPoint, Qt,
-                              QThread, pyqtSignal)
-    from PyQt6.QtGui import (QAction, QBrush, QColor, QImage, QPainter, QPen,
-                             QPixmap, QPolygon)
-    from PyQt6.QtWidgets import (QApplication, QCheckBox, QColorDialog,
-                                 QComboBox, QDialog, QDialogButtonBox,
+    from PyQt6.QtCore import (QBuffer, QByteArray, QIODevice, QPoint, QPointF,
+                              QRectF, Qt, QThread, pyqtSignal)
+    from PyQt6.QtGui import (QAction, QBrush, QColor, QImage, QKeySequence,
+                             QPainter, QPen, QPixmap, QPolygon)
+    from PyQt6.QtWidgets import (QAbstractScrollArea, QApplication, QCheckBox,
+                                 QColorDialog, QComboBox, QDialog,
+                                 QDialogButtonBox,
                                  QDoubleSpinBox, QFileDialog, QFormLayout,
                                  QGroupBox, QHBoxLayout, QInputDialog, QLabel,
                                  QLineEdit, QListWidget, QMainWindow, QMenu,
                                  QMessageBox, QPushButton, QSpinBox,
                                  QSplitter, QStatusBar, QTableWidget,
-                                 QTableWidgetItem, QTabWidget, QVBoxLayout,
-                                 QWidget)
+                                 QTableWidgetItem, QTabWidget, QToolButton,
+                                 QVBoxLayout, QWidget)
 except ImportError:  # PySide6 — API-совместимая замена
-    from PySide6.QtCore import (QBuffer, QByteArray, QIODevice, QPoint, Qt,
-                                QThread, Signal as pyqtSignal)
-    from PySide6.QtGui import (QAction, QBrush, QColor, QImage, QPainter, QPen,
-                               QPixmap, QPolygon)
-    from PySide6.QtWidgets import (QApplication, QCheckBox, QColorDialog,
-                                   QComboBox, QDialog, QDialogButtonBox,
+    from PySide6.QtCore import (QBuffer, QByteArray, QIODevice, QPoint,
+                                QPointF, QRectF, Qt, QThread,
+                                Signal as pyqtSignal)
+    from PySide6.QtGui import (QAction, QBrush, QColor, QImage, QKeySequence,
+                               QPainter, QPen, QPixmap, QPolygon)
+    from PySide6.QtWidgets import (QAbstractScrollArea, QApplication,
+                                   QCheckBox, QColorDialog, QComboBox,
+                                   QDialog, QDialogButtonBox,
                                    QDoubleSpinBox, QFileDialog, QFormLayout,
                                    QGroupBox, QHBoxLayout, QInputDialog,
                                    QLabel, QLineEdit, QListWidget,
                                    QMainWindow, QMenu, QMessageBox,
                                    QPushButton, QSpinBox, QSplitter,
                                    QStatusBar, QTableWidget,
-                                   QTableWidgetItem, QTabWidget, QVBoxLayout,
-                                   QWidget)
+                                   QTableWidgetItem, QTabWidget, QToolButton,
+                                   QVBoxLayout, QWidget)
 
 from .io import job_from_json, protection_from_dict, system_from_dict
 from .model import ValidationError
@@ -523,12 +526,22 @@ class RolesDialog(QDialog):
 # ---------------------------------------------------------------------------
 
 
-class TopologyCanvas(QWidget):
+class TopologyCanvas(QAbstractScrollArea):
     """Схема сети: перетаскивание узлов, добавление/удаление связей,
     оформление узлов (цвет, фигура, пиктограмма) и связей (цвет, тип линии,
-    толщина, стрелки, подписи концов), подписи каналов по центру линии."""
+    толщина, стрелки, подписи концов), подписи каналов по центру линии.
+
+    Масштаб и прокрутка: `positions` хранят координаты схемы, экранная точка
+    viewport'а s = p · zoom − offset, где offset — значения полос прокрутки
+    (в экранных пикселях). Масштаб и прокрутка — состояние вида, в проект
+    не сохраняются."""
 
     NODE_W, NODE_H = 130, 48
+    ZOOM_MIN, ZOOM_MAX, ZOOM_STEP = 0.25, 4.0, 1.25
+    SCENE_MARGIN = 40        # поле вокруг узлов в области прокрутки
+    LINK_HIT_PX = 7.0        # порог попадания по связи — в экранных пикселях
+    AUTOSCROLL_EDGE, AUTOSCROLL_STEP = 24, 16
+    zoom_changed = pyqtSignal(float)
     structure_changed = pyqtSignal()
     style_changed = pyqtSignal()
     node_moved = pyqtSignal()
@@ -549,9 +562,15 @@ class TopologyCanvas(QWidget):
         self.link_mode = False
         self.node_values: dict[str, float] | None = None
         self._image_cache: dict[str, QImage | None] = {}
+        self.zoom = 1.0
+        self._pan_last: QPointF | None = None  # точка начала панорамирования
+        self._space_down = False
         self.setMinimumSize(420, 300)
         self.setMouseTracking(False)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.DefaultContextMenu)
+        self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        for bar in (self.horizontalScrollBar(), self.verticalScrollBar()):
+            bar.setSingleStep(20)
 
     # --- пиктограммы узлов -------------------------------------------------
     def _node_qimage(self, name: str) -> QImage | None:
@@ -599,15 +618,151 @@ class TopologyCanvas(QWidget):
     def set_link_mode(self, enabled: bool):
         self.link_mode = enabled
         self.pending_node = None
-        self.setCursor(Qt.CursorShape.CrossCursor
-                       if enabled else Qt.CursorShape.ArrowCursor)
+        self.viewport().setCursor(Qt.CursorShape.CrossCursor
+                                  if enabled else Qt.CursorShape.ArrowCursor)
         self.repaint()
 
     def set_node_values(self, values: dict[str, float] | None):
         self.node_values = values
         self.repaint()
 
-    # --- геометрия ---------------------------------------------------------
+    def repaint(self):
+        """Перерисовка схемы с пересчётом области прокрутки (её границы
+        зависят от положения узлов). Вызывается после любых изменений."""
+        self._sync_scrollbars()
+        self.viewport().update()
+
+    # --- масштаб и прокрутка -----------------------------------------------
+    def _offset(self) -> QPointF:
+        return QPointF(self.horizontalScrollBar().value(),
+                       self.verticalScrollBar().value())
+
+    def to_scene(self, point: QPointF) -> QPointF:
+        """Экранная точка viewport'а → координаты схемы."""
+        return (QPointF(point) + self._offset()) / self.zoom
+
+    def to_screen(self, point: QPointF) -> QPointF:
+        """Координаты схемы → экранная точка viewport'а."""
+        return QPointF(point) * self.zoom - self._offset()
+
+    def content_rect(self) -> QRectF:
+        """Ограничивающий прямоугольник узлов (в координатах схемы) с полем;
+        пустой QRectF, если узлов нет."""
+        positions = self._get_positions()
+        points = [positions[n] for n in self._node_names() if n in positions]
+        if not points:
+            return QRectF()
+        pad_x = self.NODE_W / 2 + self.SCENE_MARGIN
+        pad_y = self.NODE_H / 2 + self.SCENE_MARGIN
+        xs = [p[0] for p in points]
+        ys = [p[1] for p in points]
+        return QRectF(min(xs) - pad_x, min(ys) - pad_y,
+                      max(xs) - min(xs) + 2 * pad_x,
+                      max(ys) - min(ys) + 2 * pad_y)
+
+    def _sync_scrollbars(self, offset: QPointF | None = None):
+        """Диапазоны полос прокрутки = узлы ∪ видимая область (поэтому
+        видимая область не «прыгает» при пересчёте), затем — смещение."""
+        if offset is None:
+            offset = self._offset()
+        view_w, view_h = self.viewport().width(), self.viewport().height()
+        visible = QRectF(offset.x() / self.zoom, offset.y() / self.zoom,
+                         view_w / self.zoom, view_h / self.zoom)
+        content = self.content_rect()
+        area = visible.united(content) if not content.isNull() else visible
+        hbar, vbar = self.horizontalScrollBar(), self.verticalScrollBar()
+        hbar.setRange(int(area.left() * self.zoom),
+                      max(int(area.left() * self.zoom),
+                          round(area.right() * self.zoom - view_w)))
+        vbar.setRange(int(area.top() * self.zoom),
+                      max(int(area.top() * self.zoom),
+                          round(area.bottom() * self.zoom - view_h)))
+        hbar.setPageStep(view_w)
+        vbar.setPageStep(view_h)
+        hbar.setValue(round(offset.x()))
+        vbar.setValue(round(offset.y()))
+
+    def set_zoom(self, zoom: float, anchor: QPointF | None = None):
+        """Масштаб с ограничением диапазоном; точка схемы под экранной точкой
+        `anchor` (по умолчанию — центр viewport'а) остаётся на месте."""
+        zoom = max(self.ZOOM_MIN, min(self.ZOOM_MAX, zoom))
+        if anchor is None:
+            anchor = QPointF(self.viewport().rect().center())
+        scene = self.to_scene(anchor)
+        changed = abs(zoom - self.zoom) > 1e-9
+        self.zoom = zoom
+        self._sync_scrollbars(scene * zoom - anchor)
+        self.viewport().update()
+        if changed:
+            self.zoom_changed.emit(self.zoom)
+
+    def zoom_in(self):
+        self.set_zoom(self.zoom * self.ZOOM_STEP)
+
+    def zoom_out(self):
+        self.set_zoom(self.zoom / self.ZOOM_STEP)
+
+    def reset_zoom(self):
+        self.set_zoom(1.0)
+
+    def fit_to_view(self, max_zoom: float | None = None):
+        """Масштаб и прокрутка, при которых все узлы видны; `max_zoom`
+        ограничивает увеличение (при загрузке проекта — не больше 100 %)."""
+        content = self.content_rect()
+        if content.isNull():
+            self.set_zoom(1.0)
+            return
+        view_w, view_h = self.viewport().width(), self.viewport().height()
+        zoom = min(view_w / content.width(), view_h / content.height())
+        zoom = min(zoom, max_zoom if max_zoom is not None else self.ZOOM_MAX)
+        zoom = max(self.ZOOM_MIN, min(self.ZOOM_MAX, zoom))
+        changed = abs(zoom - self.zoom) > 1e-9
+        self.zoom = zoom
+        center = content.center() * zoom
+        self._sync_scrollbars(QPointF(center.x() - view_w / 2,
+                                      center.y() - view_h / 2))
+        self.viewport().update()
+        if changed:
+            self.zoom_changed.emit(self.zoom)
+
+    def scrollContentsBy(self, dx, dy):
+        # Смещение учитывается трансформацией в paintEvent — просто перерисовка.
+        self.viewport().update()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._sync_scrollbars()
+
+    def wheelEvent(self, event):
+        """Ctrl + колесо — масштаб относительно курсора, Shift + колесо —
+        горизонтальная прокрутка, колесо — вертикальная."""
+        delta = event.angleDelta().y() or event.angleDelta().x()
+        if not delta:
+            return
+        modifiers = event.modifiers()
+        if modifiers & Qt.KeyboardModifier.ControlModifier:
+            factor = self.ZOOM_STEP ** (delta / 120)
+            self.set_zoom(self.zoom * factor, event.position())
+        elif modifiers & Qt.KeyboardModifier.ShiftModifier:
+            bar = self.horizontalScrollBar()
+            bar.setValue(bar.value() - delta)
+        else:
+            bar = self.verticalScrollBar()
+            bar.setValue(bar.value() - delta)
+        event.accept()
+
+    def _autoscroll(self, pos: QPointF):
+        """Прокрутка вида, когда перетаскиваемый узел у края viewport'а."""
+        edge, step = self.AUTOSCROLL_EDGE, self.AUTOSCROLL_STEP
+        rect = self.viewport().rect()
+        dx = (-step if pos.x() < edge else
+              step if pos.x() > rect.width() - edge else 0)
+        dy = (-step if pos.y() < edge else
+              step if pos.y() > rect.height() - edge else 0)
+        if dx or dy:
+            self._sync_scrollbars(self._offset() + QPointF(dx, dy))
+
+    # --- геометрия (координаты схемы) -----------------------------------------
     def _node_at(self, x, y) -> str | None:
         positions = self._get_positions()
         for name in reversed(self._node_names()):
@@ -618,7 +773,7 @@ class TopologyCanvas(QWidget):
 
     def _link_at(self, x, y) -> tuple[str, str] | None:
         positions = self._get_positions()
-        best, best_dist = None, 7.0
+        best, best_dist = None, self.LINK_HIT_PX / self.zoom
         for a, b in self._links():
             if a not in positions or b not in positions:
                 continue
@@ -635,8 +790,17 @@ class TopologyCanvas(QWidget):
         return best
 
     # --- события мыши/клавиатуры -------------------------------------------
+    def _is_pan_press(self, event) -> bool:
+        return (event.button() == Qt.MouseButton.MiddleButton
+                or (event.button() == Qt.MouseButton.LeftButton
+                    and self._space_down))
+
     def mousePressEvent(self, event):
-        pos = event.position()
+        if self._is_pan_press(event):
+            self._pan_last = event.position()
+            self.viewport().setCursor(Qt.CursorShape.ClosedHandCursor)
+            return
+        pos = self.to_scene(event.position())
         x, y = pos.x(), pos.y()
         if self.link_mode:
             node = self._node_at(x, y)
@@ -673,21 +837,44 @@ class TopologyCanvas(QWidget):
         self.repaint()
 
     def mouseMoveEvent(self, event):
+        if self._pan_last is not None:
+            delta = event.position() - self._pan_last
+            self._pan_last = event.position()
+            self._sync_scrollbars(self._offset() - delta)
+            return
         if self.selected_node is None or self.link_mode:
             return
         if not (event.buttons() & Qt.MouseButton.LeftButton):
             return
         positions = self._get_positions()
         if self.selected_node in positions:
-            positions[self.selected_node] = (event.position().x(),
-                                             event.position().y())
+            self._autoscroll(event.position())
+            pos = self.to_scene(event.position())
+            positions[self.selected_node] = (pos.x(), pos.y())
             self.node_moved.emit()
             self.repaint()
 
+    def mouseReleaseEvent(self, event):
+        if self._pan_last is not None and not (
+                event.buttons() & (Qt.MouseButton.MiddleButton
+                                   | Qt.MouseButton.LeftButton)):
+            self._pan_last = None
+            self._restore_cursor()
+
+    def _restore_cursor(self):
+        if self._space_down:
+            shape = Qt.CursorShape.OpenHandCursor
+        elif self.link_mode:
+            shape = Qt.CursorShape.CrossCursor
+        else:
+            shape = Qt.CursorShape.ArrowCursor
+        self.viewport().setCursor(shape)
+
     def mouseDoubleClickEvent(self, event):
-        if self.link_mode:
+        if self.link_mode or self._space_down:
             return
-        x, y = event.position().x(), event.position().y()
+        pos = self.to_scene(event.position())
+        x, y = pos.x(), pos.y()
         if self._node_at(x, y) is not None:
             return
         link = self._link_at(x, y)
@@ -699,7 +886,8 @@ class TopologyCanvas(QWidget):
     def contextMenuEvent(self, event):
         if self.link_mode:
             return
-        x, y = event.pos().x(), event.pos().y()
+        pos = self.to_scene(QPointF(event.pos()))
+        x, y = pos.x(), pos.y()
         menu = QMenu(self)
         node = self._node_at(x, y)
         if node is not None:
@@ -773,6 +961,27 @@ class TopologyCanvas(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Delete:
             self.delete_selected()
+        elif event.key() == Qt.Key.Key_Space:
+            # пробел + левая кнопка — панорамирование
+            if not event.isAutoRepeat():
+                self._space_down = True
+                self._restore_cursor()
+        else:
+            super().keyPressEvent(event)
+
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key.Key_Space and not event.isAutoRepeat():
+            self._space_down = False
+            if self._pan_last is None:
+                self._restore_cursor()
+        else:
+            super().keyReleaseEvent(event)
+
+    def focusOutEvent(self, event):
+        self._space_down = False
+        if self._pan_last is None:
+            self._restore_cursor()
+        super().focusOutEvent(event)
 
     def delete_selected(self):
         section = gui_section(self._get_project())
@@ -813,9 +1022,14 @@ class TopologyCanvas(QWidget):
 
     # --- отрисовка ----------------------------------------------------------
     def paintEvent(self, event):
-        painter = QPainter(self)
+        painter = QPainter(self.viewport())
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.fillRect(self.rect(), QColor("#ffffff"))
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.fillRect(self.viewport().rect(), QColor("#ffffff"))
+        # Далее всё рисуется в координатах схемы: s = p · zoom − offset.
+        offset = self._offset()
+        painter.translate(-offset.x(), -offset.y())
+        painter.scale(self.zoom, self.zoom)
         positions = self._get_positions()
         gui = self._get_gui()
         labels = link_labels_from_section(gui)
@@ -1070,11 +1284,12 @@ class MainWindow(QMainWindow):
         delete_btn = QPushButton("Удалить выбранное")
         delete_btn.clicked.connect(self._delete_selected)
         canvas_bar.addWidget(delete_btn)
-        canvas_bar.addStretch(1)
         canvas_layout.addLayout(canvas_bar)
         self.canvas = TopologyCanvas(lambda: self.project,
                                      lambda: self.positions,
                                      self._gui_view)
+        self._build_zoom_controls(canvas_bar)
+        canvas_bar.addStretch(1)
         self.canvas.structure_changed.connect(self._structure_changed)
         self.canvas.style_changed.connect(self._on_style_changed)
         self.canvas.node_moved.connect(self._mark_dirty)
@@ -1109,6 +1324,45 @@ class MainWindow(QMainWindow):
 
         root.addWidget(right)
         self.setCentralWidget(central)
+
+    def _build_zoom_controls(self, bar: QHBoxLayout):
+        """Кнопки масштаба канваса и подпись с текущим масштабом; горячие
+        клавиши — действия окна (работают при фокусе в любом виджете)."""
+        canvas = self.canvas
+        specs = (
+            ("zoom_out", "−", "Уменьшить масштаб (Ctrl+−)",
+             canvas.zoom_out, ["Ctrl+-"]),
+            ("zoom_in", "+", "Увеличить масштаб (Ctrl+=)",
+             canvas.zoom_in, ["Ctrl+=", "Ctrl++"]),
+            ("zoom_reset", "100 %", "Масштаб 100 % (Ctrl+0)",
+             canvas.reset_zoom, ["Ctrl+0"]),
+            ("zoom_fit", "Вписать", "Показать все узлы (Ctrl+9)",
+             canvas.fit_to_view, ["Ctrl+9"]),
+        )
+        self.zoom_label = QLabel()
+        self.zoom_label.setMinimumWidth(48)
+        self.zoom_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        for key, text, tip, slot, shortcuts in specs:
+            act = QAction(text, self)
+            act.setToolTip(tip)
+            act.setShortcuts([QKeySequence(sc) for sc in shortcuts])
+            act.setShortcutContext(Qt.ShortcutContext.WindowShortcut)
+            act.triggered.connect(lambda checked=False, f=slot: f())
+            self.addAction(act)
+            button = QToolButton()
+            button.setDefaultAction(act)
+            bar.addWidget(button)
+            setattr(self, f"{key}_action", act)
+            if key == "zoom_out":  # подпись масштаба — между «−» и «+»
+                bar.addWidget(self.zoom_label)
+        canvas.zoom_changed.connect(self._update_zoom_controls)
+        self._update_zoom_controls(canvas.zoom)
+
+    def _update_zoom_controls(self, zoom: float):
+        self.zoom_label.setText(f"{round(zoom * 100)} %")
+        canvas = self.canvas
+        self.zoom_out_action.setEnabled(zoom > canvas.ZOOM_MIN + 1e-9)
+        self.zoom_in_action.setEnabled(zoom < canvas.ZOOM_MAX - 1e-9)
 
     def _build_nodes_tab(self) -> QWidget:
         widget = QWidget()
@@ -2181,6 +2435,7 @@ class MainWindow(QMainWindow):
         self.canvas.clear_image_cache()
         self._load_project_into_widgets()
         self._layout_new_nodes()
+        self.canvas.fit_to_view(max_zoom=1.0)
         self._update_title()
 
     def open_project(self):
@@ -2224,6 +2479,7 @@ class MainWindow(QMainWindow):
         self.canvas.clear_image_cache()
         self._load_project_into_widgets()
         self._layout_new_nodes()
+        self.canvas.fit_to_view(max_zoom=1.0)
         self._update_title()
         self.statusBar().showMessage(f"Открыт: {path}", 5000)
         self._report_dropped_link_styles(raw_gui, section)

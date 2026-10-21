@@ -262,6 +262,120 @@ class TestGuiSmoke(unittest.TestCase):
         self.assertEqual([r["name"] for r in roles], ["Шлюз"])
         self.assertEqual(roles[0]["impacts"][0]["defeat_probability"], 0.2)
 
+    # ------------------------------------------------------------------
+    # масштаб и прокрутка канваса
+    # ------------------------------------------------------------------
+    def _shown_window_with_example6(self):
+        from pathlib import Path
+        window = gui.MainWindow()
+        window.resize(1280, 800)
+        window.show()
+        self.app.processEvents()
+        window.load_project(Path(EXAMPLE6))
+        self.app.processEvents()
+        return window
+
+    def _mouse(self, kind, pos, button, buttons):
+        from PyQt6.QtCore import QEvent, QPointF, Qt
+        from PyQt6.QtGui import QMouseEvent
+        event_type = {"press": QEvent.Type.MouseButtonPress,
+                      "move": QEvent.Type.MouseMove,
+                      "release": QEvent.Type.MouseButtonRelease}[kind]
+        return QMouseEvent(event_type, QPointF(pos), QPointF(pos), button,
+                           buttons, Qt.KeyboardModifier.NoModifier)
+
+    def test_canvas_screen_scene_roundtrip(self):
+        from PyQt6.QtCore import QPointF
+        window = self._shown_window_with_example6()
+        canvas = window.canvas
+        for zoom in (0.25, 0.8, 1.0, 2.5, 4.0):
+            canvas.set_zoom(zoom)
+            canvas.horizontalScrollBar().setValue(
+                canvas.horizontalScrollBar().minimum() + 37)
+            for point in (QPointF(0, 0), QPointF(123.5, 77.25),
+                          QPointF(-40, 900)):
+                back = canvas.to_scene(canvas.to_screen(point))
+                self.assertAlmostEqual(back.x(), point.x(), places=6)
+                self.assertAlmostEqual(back.y(), point.y(), places=6)
+        window.close()
+
+    def test_canvas_zoom_is_clamped(self):
+        window = self._shown_window_with_example6()
+        canvas = window.canvas
+        for _ in range(20):
+            canvas.zoom_in()
+        self.assertAlmostEqual(canvas.zoom, canvas.ZOOM_MAX)
+        self.assertFalse(window.zoom_in_action.isEnabled())
+        self.assertEqual(window.zoom_label.text(), "400 %")
+        for _ in range(30):
+            canvas.zoom_out()
+        self.assertAlmostEqual(canvas.zoom, canvas.ZOOM_MIN)
+        self.assertFalse(window.zoom_out_action.isEnabled())
+        canvas.set_zoom(100.0)
+        self.assertAlmostEqual(canvas.zoom, canvas.ZOOM_MAX)
+        window.zoom_reset_action.trigger()
+        self.assertAlmostEqual(canvas.zoom, 1.0)
+        self.assertEqual(window.zoom_label.text(), "100 %")
+        window.close()
+
+    def test_canvas_fit_shows_all_nodes(self):
+        from PyQt6.QtCore import QPointF
+        window = self._shown_window_with_example6()
+        canvas = window.canvas
+        # уводим вид далеко и увеличиваем — узлы вне видимой области
+        canvas.set_zoom(4.0)
+        canvas.horizontalScrollBar().setValue(
+            canvas.horizontalScrollBar().maximum())
+        window.zoom_fit_action.trigger()
+        view = canvas.viewport().rect()
+        half_w, half_h = canvas.NODE_W / 2, canvas.NODE_H / 2
+        for name, (x, y) in window.positions.items():
+            for dx, dy in ((-half_w, -half_h), (half_w, half_h)):
+                corner = canvas.to_screen(QPointF(x + dx, y + dy))
+                self.assertTrue(view.contains(corner.toPoint()),
+                                f"{name}: {corner} вне {view}")
+        window.close()
+
+    def test_canvas_drag_stores_scene_coordinates(self):
+        from PyQt6.QtCore import QPointF, Qt
+        window = self._shown_window_with_example6()
+        canvas = window.canvas
+        canvas.set_zoom(2.0)
+        name = window.project["system"]["nodes"][0]["name"]
+        start = canvas.to_screen(QPointF(*window.positions[name]))
+        target = start + QPointF(30, 20)
+        left = Qt.MouseButton.LeftButton
+        canvas.mousePressEvent(self._mouse("press", start, left, left))
+        self.assertEqual(canvas.selected_node, name)
+        canvas.mouseMoveEvent(self._mouse("move", target, Qt.MouseButton.NoButton,
+                                          left))
+        expected = canvas.to_scene(target)
+        x, y = window.positions[name]
+        self.assertAlmostEqual(x, expected.x(), places=6)
+        self.assertAlmostEqual(y, expected.y(), places=6)
+        window.dirty = False  # иначе closeEvent спросит о сохранении
+        window.close()
+
+    def test_canvas_zoom_keeps_positions_and_saved_project(self):
+        import tempfile
+        from pathlib import Path
+        window = self._shown_window_with_example6()
+        canvas = window.canvas
+        before_positions = dict(window.positions)
+        with tempfile.TemporaryDirectory() as tmp:
+            first, second = Path(tmp) / "a.json", Path(tmp) / "b.json"
+            self.assertTrue(window._write_project(first))
+            canvas.set_zoom(2.3)
+            canvas.verticalScrollBar().setValue(
+                canvas.verticalScrollBar().maximum())
+            canvas.fit_to_view()
+            canvas.set_zoom(0.4)
+            self.assertEqual(window.positions, before_positions)
+            self.assertTrue(window._write_project(second))
+            self.assertEqual(first.read_text(encoding="utf-8"),
+                             second.read_text(encoding="utf-8"))
+        window.close()
+
 
 if __name__ == "__main__":
     unittest.main()
