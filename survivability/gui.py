@@ -23,7 +23,7 @@ import json
 import sys
 from pathlib import Path
 
-try:  # PyQt6 — основная зависимость (requirements.txt)
+try:  # PyQt6 — основная зависимость (группа gui в pyproject.toml)
     from PyQt6.QtCore import (QBuffer, QByteArray, QIODevice, QPoint, QPointF,
                               QRectF, Qt, QThread, pyqtSignal)
     from PyQt6.QtGui import (QAction, QBrush, QColor, QImage, QKeySequence,

@@ -1,4 +1,0 @@
-# Ядро расчётов (model/calc/system_calc/protection/io/cli) — только стандартная
-# библиотека Python 3.11+.
-# Графическая оболочка (survivability/gui.py) требует PyQt6:
-PyQt6>=6.11

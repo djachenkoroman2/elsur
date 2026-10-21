@@ -1,0 +1,20 @@
+[project]
+name = "survivability"
+version = "1.2.0"
+description = "Расчёт живучести узла и системы компьютерной сети в условиях деструктивных воздействий"
+readme = "README.md"
+requires-python = ">=3.11"
+# Ядро расчётов (model/calc/system_calc/protection/io/cli) — только стандартная
+# библиотека Python, внешних зависимостей нет.
+dependencies = []
+
+[dependency-groups]
+# Графическая оболочка (survivability/gui.py) требует PyQt6.
+gui = ["PyQt6>=6.11"]
+# Сборка исполняемого файла GUI (survivability-gui.spec).
+build = ["pyinstaller>=6"]
+
+[tool.uv]
+# Приложение запускается из исходников (python -m survivability), пакет не собирается.
+package = false
+default-groups = ["gui"]

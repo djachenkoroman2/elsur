@@ -18,29 +18,30 @@
 
 ## Установка
 
-Требуется Python 3.11+. Внешних зависимостей для консоли нет; GUI требует
-PyQt6 (ставится из `requirements.txt`).
+Окружение собирается менеджером [uv](https://docs.astral.sh/uv/)
+(установка: `pip install uv`, `winget install astral-sh.uv` или
+`curl -LsSf https://astral.sh/uv/install.sh | sh`). Нужен Python 3.11+;
+если подходящего интерпретатора нет, uv скачает его сам.
 
 ```bash
-# Windows (Git Bash / cmd):
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-
-# Linux/macOS:
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+uv sync
 ```
 
-Если для вашей версии Python нет колёс PyQt6, установите PySide6
-(API-совместимую замену) — код работает с обоими пакетами.
+Команда создаёт `.venv` и ставит версии, зафиксированные в `uv.lock`.
+Внешних зависимостей у консоли нет; PyQt6 для GUI входит в группу `gui`,
+которая ставится по умолчанию (`uv sync --no-group gui` — без неё).
+Активировать `.venv` не нужно: все команды ниже запускаются через `uv run`
+одинаково в Windows, Linux и macOS.
+
+Если для вашей версии Python нет колёс PyQt6, поставьте PySide6
+(API-совместимую замену) — код работает с обоими пакетами:
+`uv sync --no-group gui`, затем `uv pip install PySide6`. Повторный
+`uv sync` удалит PySide6 как лишний пакет — используйте `uv sync --inexact`.
 
 ## Первый запуск (консоль)
 
 ```bash
-# Windows:
-.venv\Scripts\python.exe -m survivability --demo
-# Linux/macOS:
-.venv/bin/python -m survivability --demo
+uv run python -m survivability --demo
 ```
 
 `--demo` считает встроенный пример «Узел ЦОИ-1» и печатает отчёт:
@@ -50,7 +51,7 @@ $Q_i$ и коэффициент готовности $K$.
 Следующий шаг — расчёт системы из файла:
 
 ```bash
-.venv\Scripts\python.exe -m survivability --file examples/example6_system_line.json
+uv run python -m survivability --file examples/example6_system_line.json
 ```
 
 В отчёте: живучесть системы $Q(S)$, способ расчёта и таблица важности узлов
@@ -61,7 +62,7 @@ $Q_i$ и коэффициент готовности $K$.
 ## Первый запуск (графический интерфейс)
 
 ```bash
-.venv\Scripts\python.exe -m survivability.gui
+uv run python -m survivability.gui
 ```
 
 Откроется главное окно: слева редактор узлов/системы/защиты, справа канвас
@@ -73,13 +74,10 @@ $Q_i$ и коэффициент готовности $K$.
 ## Проверка, что всё работает
 
 ```bash
-# Windows:
-.venv\Scripts\python.exe -m unittest discover -s tests -v
-# Linux/macOS:
-.venv/bin/python -m unittest discover -s tests -v
+uv run python -m unittest discover -s tests -v
 ```
 
-Должно быть: **123 теста, все OK** (15 GUI-тестов пропускаются, если PyQt
+Должно быть: **128 тестов, все OK** (15 GUI-тестов пропускаются, если PyQt
 не установлен). Если тесты зелёные — установка корректна.
 
 ## Частые вопросы

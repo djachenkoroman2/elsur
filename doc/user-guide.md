@@ -4,7 +4,8 @@
 окна и типовых сценариев работы. Консольные режимы и формат входных
 данных — в разделе «Формат входного JSON» ниже и в
 [quickstart.md](quickstart.md). Окно открывается командой
-`python -m survivability.gui`.
+`uv run python -m survivability.gui` (окружение готовится командой `uv sync`,
+см. [quickstart.md](quickstart.md)).
 
 ## 1. Общая компоновка окна
 
@@ -383,9 +384,9 @@ $Q(S) = 0.701266$), `example7_system_parallel.json` (два резервных �
 ### 10.4. Запуск из консоли
 
 ```bash
-python -m survivability --file examples/example8_variants_chain.json
-python -m survivability --file examples/example9_variants_filter.json --output results.json
-python -m survivability --file examples/example9_variants_filter.json --seed 7   # иное зерно
+uv run python -m survivability --file examples/example8_variants_chain.json
+uv run python -m survivability --file examples/example9_variants_filter.json --output results.json
+uv run python -m survivability --file examples/example9_variants_filter.json --seed 7   # иное зерно
 ```
 
 Коды возврата: `0` — расчёт выполнен; `2` — ошибка входных данных

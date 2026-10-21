@@ -34,44 +34,45 @@ g^* = \arg\max_{g \in G} Q_g(S) \;\; \text{при} \;\; C(g) \leq C_{\text{до�
 
 ## Установка и запуск
 
-Требуется Python 3.11+. Ядро расчётов использует только стандартную
-библиотеку; для графической оболочки нужен PyQt6 (указан в `requirements.txt`).
+Окружение собирается через [uv](https://docs.astral.sh/uv/) по
+`pyproject.toml` и `uv.lock`. Нужен Python 3.11+ (uv скачает подходящий
+интерпретатор сам, если в системе его нет). Ядро расчётов использует только
+стандартную библиотеку; PyQt6 для графической оболочки входит в группу
+зависимостей `gui`, которая ставится по умолчанию.
 
 ```bash
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt   # Windows
-# Linux/macOS: .venv/bin/python -m pip install -r requirements.txt
-
-# Windows:
-.venv\Scripts\python.exe -m survivability --demo
-# Linux/macOS:
-.venv/bin/python -m survivability --demo
+uv sync                          # создать .venv и установить зависимости
+uv run python -m survivability --demo
 ```
+
+`uv sync --no-group gui` — окружение только для консоли (без PyQt6);
+`uv sync --group build` — дополнительно PyInstaller для сборки
+исполняемого файла GUI (`uv run pyinstaller survivability-gui.spec`).
 
 ## Режимы работы
 
 ```bash
 # Демонстрационный пример (без ручного ввода):
-python -m survivability --demo
+uv run python -m survivability --demo
 
 # Исходные данные из JSON-файла (формат — examples/input.json,
 # система — examples/example6_system_line.json):
-python -m survivability --file examples/input.json
+uv run python -m survivability --file examples/input.json
 
 # Интерактивный ввод:
-python -m survivability
+uv run python -m survivability
 
 # Сохранение результатов (.csv или .json по расширению):
-python -m survivability --demo --output results.json
+uv run python -m survivability --demo --output results.json
 
 # Графическая оболочка (редактор топологии, роли узлов, оформление
 # схемы — цвета, фигуры, подписи каналов; расчёт; экспорт SVG/DOT):
-python -m survivability.gui
+uv run python -m survivability.gui
 ```
 
 ## Графическая оболочка
 
-`python -m survivability.gui` — редактор проекта с канвасом топологии:
+`uv run python -m survivability.gui` — редактор проекта с канвасом топологии:
 создание узлов по ролям из библиотеки (сервер, маршрутизатор, …) или
 вручную, пользовательские наборы ролей, перетаскивание узлов (координаты
 сохраняются в файле проекта), цвета и фигуры узлов, подписи каналов связи.
@@ -81,7 +82,7 @@ python -m survivability.gui
 ## Тесты
 
 ```bash
-python -m unittest discover -s tests -v
+uv run python -m unittest discover -s tests -v
 ```
 
 ## Структура проекта
@@ -98,6 +99,7 @@ survivability/      пакет приложения
   gui.py            графическая оболочка PyQt (python -m survivability.gui)
   __main__.py       точка входа: python -m survivability
 tests/              модульные тесты (unittest)
+pyproject.toml      метаданные проекта и зависимости (uv); uv.lock — зафиксированные версии
 doc/                документация: quickstart / user-guide / developer-guide, формулы LaTeX, схемы SVG
 examples/           примеры входных данных (узел — 1–5, система — 6–7, защита — 8–9)
 ```

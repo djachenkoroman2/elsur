@@ -13,7 +13,7 @@
 (сверху вниз):
 
 1. **Графическая оболочка** — `survivability/gui.py` (PyQt6/PySide6).
-   Единственный модуль, требующий Qt. Запуск: `python -m survivability.gui`.
+   Единственный модуль, требующий Qt. Запуск: `uv run python -m survivability.gui`.
 2. **Кодек проекта** — `survivability/project_codec.py`. Преобразование
    моделей в JSON-совместимые словари, сериализация служебной секции `gui`
    (роли, координаты, цвета, фигуры, подписи каналов), рендереры SVG/DOT.
@@ -145,7 +145,7 @@
 
 ## 4. Графическая оболочка — `gui.py`
 
-Запуск `python -m survivability.gui`, точка входа `main()` → `QApplication`
+Запуск `uv run python -m survivability.gui`, точка входа `main()` → `QApplication`
 + `MainWindow`. Импорты Qt — только внутри модуля (try PyQt6, fallback
 PySide6). Состав:
 
@@ -243,7 +243,8 @@ PySide6). Состав:
 |------------|-----|------------|
 | Python 3.11+ | везде | единственное требование ядра |
 | Стандартная библиотека | ядро, кодек | `dataclasses`, `argparse`, `json`, `math`, `random`, `csv`, `xml.sax.saxutils` |
-| PyQt6 ≥ 6.11 | `gui.py` | первая и единственная внешняя зависимость (`requirements.txt`); fallback на PySide6 той же кодовой базой |
+| PyQt6 ≥ 6.11 | `gui.py` | первая и единственная внешняя зависимость (группа `gui` в `pyproject.toml`); fallback на PySide6 той же кодовой базой |
+| uv | `pyproject.toml`, `uv.lock` | сборка окружения: `uv sync`; группы `gui` (по умолчанию) и `build` (PyInstaller) |
 | unittest | `tests/` | без сторонних фреймворков |
 | LaTeX (pdflatex) | `doc/formulas.tex` | сборка PDF, два прогона |
 | Собственные SVG-рендереры | `project_codec.py` | графика без зависимостей |
@@ -273,8 +274,8 @@ PySide6). Состав:
 
 ## 10. Тестирование
 
-128 тестов, фреймворк `unittest`, запуск `python -m unittest discover
--s tests -v`. Карта покрытия:
+128 тестов, фреймворк `unittest`, запуск `uv run python -m unittest
+discover -s tests -v`. Карта покрытия:
 
 | Файл | Тестов | Что проверяет |
 |------|--------|---------------|
