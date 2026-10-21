@@ -1,0 +1,8 @@
+{
+  "name": "Минимальный узел",
+  "own_failure_rate": 0.1,
+  "period": 12.0,
+  "impacts": [
+    {"name": "Отказ канала связи", "intensity": 0.05, "defeat_probability": 1.0}
+  ]
+}

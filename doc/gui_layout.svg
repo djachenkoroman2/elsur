@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <style>
+    .win   { fill:#ffffff; stroke:#666; stroke-width:1.5; rx:10; }
+    .panel { fill:#f7f7f7; stroke:#999; stroke-width:1.2; rx:8; }
+    .tab   { fill:#e8e8e8; stroke:#999; stroke-width:1; }
+    .taba  { fill:#cfe2f3; stroke:#1155cc; stroke-width:1.2; }
+    .btn   { fill:#fce5cd; stroke:#b45f06; stroke-width:1.2; rx:6; }
+    .fld   { fill:#ffffff; stroke:#888; stroke-width:1; rx:4; }
+    .node  { fill:#cfe2f3; stroke:#1155cc; stroke-width:1.5; }
+    .nodec { fill:#ff8800; stroke:#b45f06; stroke-width:1.5; }
+    .edge  { stroke:#666; stroke-width:2; }
+    .box   { rx:8; }
+    .t     { font-size:13px; fill:#111; }
+    .s     { font-size:11.5px; fill:#222; }
+    .b     { font-size:13px; font-weight:bold; fill:#111; }
+    .num   { fill:#fff; stroke:#333; stroke-width:1.5; }
+    .nt    { font-size:11px; fill:#111; font-weight:bold; }
+    .lg    { font-size:12px; fill:#333; }
+    .lbl   { font-size:11px; fill:#333; stroke:#fff; stroke-width:3px; paint-order:stroke; }
+  </style>
+
+  <text x="500" y="26" text-anchor="middle" class="b">Главное окно survivability: области и элементы</text>
+
+  <!-- Рамка окна -->
+  <rect x="16" y="38" width="968" height="700" class="win"/>
+
+  <!-- 1. Меню -->
+  <rect x="16" y="38" width="968" height="28" fill="#ececec" stroke="#999"/>
+  <text x="36"  y="57" class="t">Проект</text>
+  <text x="110" y="57" class="t">Экспорт</text>
+  <text x="190" y="57" class="t">Расчёт</text>
+  <text x="262" y="57" class="t">Настройки</text>
+  <circle cx="966" cy="52" r="10" class="num"/><text x="966" y="56" text-anchor="middle" class="nt">1</text>
+
+  <!-- 2. Левая панель с вкладками -->
+  <rect x="28" y="78" width="300" height="440" class="panel"/>
+  <rect x="28"  y="78" width="100" height="26" class="taba"/>
+  <rect x="128" y="78" width="100" height="26" class="tab"/>
+  <rect x="228" y="78" width="100" height="26" class="tab"/>
+  <text x="78"  y="96" text-anchor="middle" class="t">Узлы</text>
+  <text x="178" y="96" text-anchor="middle" class="s">Система</text>
+  <text x="278" y="96" text-anchor="middle" class="s">Защита</text>
+  <circle cx="316" cy="91" r="10" class="num"/><text x="316" y="95" text-anchor="middle" class="nt">2</text>
+
+  <!-- 3. Список узлов -->
+  <rect x="40" y="116" width="276" height="96" class="fld"/>
+  <text x="52" y="136" class="s">Сервер-1</text>
+  <text x="52" y="156" class="s">Маршрутизатор-1</text>
+  <text x="52" y="176" class="s">АРМ-1</text>
+  <text x="52" y="200" class="s">— список узлов системы —</text>
+  <circle cx="304" cy="126" r="10" class="num"/><text x="304" y="130" text-anchor="middle" class="nt">3</text>
+
+  <!-- Кнопки добавления/удаления -->
+  <rect x="40"  y="222" width="134" height="26" class="btn"/>
+  <text x="107" y="240" text-anchor="middle" class="s">Добавить узел</text>
+  <rect x="182" y="222" width="134" height="26" class="btn"/>
+  <text x="249" y="240" text-anchor="middle" class="s">Удалить узел</text>
+
+  <!-- 4. Параметры узла -->
+  <rect x="40" y="258" width="276" height="248" class="fld"/>
+  <text x="52" y="278" class="b">Параметры узла</text>
+  <text x="52" y="300" class="s">Имя:</text>
+  <rect x="140" y="288" width="164" height="20" class="fld"/><text x="148" y="303" class="s">Сервер-1</text>
+  <text x="52" y="326" class="s">λ⁽⁰⁾, μ, T:</text>
+  <rect x="140" y="314" width="164" height="20" class="fld"/><text x="148" y="329" class="s">0.01 | 4.0 | 1.0</text>
+  <text x="52" y="352" class="s">Роль:</text>
+  <rect x="140" y="340" width="164" height="20" class="fld"/><text x="148" y="355" class="s">Сервер ▾</text>
+  <text x="52" y="378" class="s">Фигура:</text>
+  <rect x="140" y="366" width="164" height="20" class="fld"/><text x="148" y="381" class="s">овал ▾</text>
+  <text x="52" y="404" class="s">Цвет:</text>
+  <rect x="140" y="392" width="90" height="20" class="fld" fill="#ff8800"/><text x="236" y="407" class="s">Цвет…</text>
+  <rect x="52" y="424" width="252" height="26" class="btn"/>
+  <text x="178" y="442" text-anchor="middle" class="s">Изменить воздействия…</text>
+  <text x="52" y="486" class="s">Вкладки «Система» (W_доп, target, N, seed)</text>
+  <text x="52" y="502" class="s">и «Защита» (бюджет, варианты g) —</text>
+  <text x="52" y="518" class="s">аналогичные формы слева.</text>
+  <circle cx="304" cy="270" r="10" class="num"/><text x="304" y="274" text-anchor="middle" class="nt">4</text>
+
+  <!-- 5. Панель канваса -->
+  <rect x="344" y="78" width="628" height="440" class="panel"/>
+  <text x="356" y="100" class="b">Топология сети</text>
+  <text x="500" y="126" class="s">Раскраска:</text>
+  <rect x="568" y="112" width="130" height="22" class="fld"/><text x="576" y="128" class="s">по Q_i ▾</text>
+  <rect x="706" y="112" width="120" height="22" class="btn"/>
+  <text x="766" y="128" text-anchor="middle" class="s">Добавить связь</text>
+  <rect x="834" y="112" width="126" height="22" class="btn"/>
+  <text x="897" y="128" text-anchor="middle" class="s">Удалить выбранное</text>
+  <circle cx="952" cy="100" r="10" class="num"/><text x="952" y="104" text-anchor="middle" class="nt">5</text>
+
+  <!-- 6. Канвас -->
+  <rect x="356" y="146" width="604" height="356" fill="#ffffff" stroke="#888"/>
+  <line x1="470" y1="230" x2="640" y2="330" class="edge"/>
+  <line x1="640" y1="330" x2="800" y2="230" class="edge"/>
+  <text x="555" y="272" text-anchor="middle" class="lbl">оптоволокно</text>
+  <ellipse cx="470" cy="230" rx="65" ry="26" class="nodec"/>
+  <text x="470" y="235" text-anchor="middle" class="s">Сервер-1</text>
+  <polygon points="640,296 690,330 640,364 590,330" class="node"/>
+  <text x="640" y="335" text-anchor="middle" class="s">АРМ-1</text>
+  <rect x="745" y="206" width="110" height="48" class="node" rx="9"/>
+  <text x="800" y="234" text-anchor="middle" class="s">Маршрутизатор-1</text>
+  <text x="370" y="486" class="s">Канвас: перетаскивание узлов мышью, двойной клик по связи — подпись,</text>
+  <text x="370" y="502" class="s">правая кнопка — контекстное меню (цвет, фигура, подпись, удаление).</text>
+  <circle cx="940" cy="160" r="10" class="num"/><text x="940" y="164" text-anchor="middle" class="nt">6</text>
+
+  <!-- 7. Результаты -->
+  <rect x="344" y="534" width="628" height="170" class="panel"/>
+  <text x="356" y="556" class="b">Результаты</text>
+  <text x="356" y="578" class="s">Живучесть системы Q(S) = 0.701266 · Способ расчёта: точный перебор</text>
+  <rect x="356" y="590" width="150" height="24" class="taba"/>
+  <rect x="506" y="590" width="150" height="24" class="tab"/>
+  <text x="431" y="607" text-anchor="middle" class="s">Важность узлов</text>
+  <text x="581" y="607" text-anchor="middle" class="s">Варианты защиты</text>
+  <rect x="356" y="622" width="604" height="70" class="fld"/>
+  <text x="366" y="640" class="s">Узел            I (Бирнбаум)   Q(S|x=1)    Q(S|x=0)</text>
+  <text x="366" y="658" class="s">Сервер БД       0.973637       0.973637    0.000000</text>
+  <text x="366" y="676" class="s">ЦОИ             0.117346       0.720254    0.602908</text>
+  <circle cx="952" cy="546" r="10" class="num"/><text x="952" y="550" text-anchor="middle" class="nt">7</text>
+
+  <!-- 8. Строка состояния -->
+  <rect x="16" y="700" width="968" height="26" fill="#ececec" stroke="#999"/>
+  <text x="32" y="718" class="s">Готово · Открыт: project.json · при ошибках — текст валидации</text>
+  <circle cx="966" cy="713" r="10" class="num"/><text x="966" y="717" text-anchor="middle" class="nt">8</text>
+
+  <!-- Легенда -->
+  <text x="30" y="762" class="lg">1 — меню · 2 — вкладки редактора (Узлы / Система / Защита) · 3 — список узлов · 4 — параметры выбранного узла</text>
+  <text x="30" y="782" class="lg">5 — панель канваса (раскраска, добавление связи) · 6 — канвас топологии · 7 — панель результатов · 8 — строка состояния</text>
+</svg>

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+results.csv
+results.json
+doc/*.aux
+doc/*.log
+.tools/
+build/
+dist/

@@ -1,0 +1,9 @@
+{
+  "name": "Узел под массированной атакой",
+  "own_failure_rate": 0.5,
+  "recovery_rate": 2.0,
+  "period": 1.0,
+  "impacts": [
+    {"name": "Массированная DDoS-атака (100+ Гбит/с)", "intensity": 10.0, "defeat_probability": 0.8}
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "system": {
+    "name": "Новая система",
+    "nodes": [
+      {
+        "name": "Узел-1",
+        "own_failure_rate": 0.0,
+        "recovery_rate": 0.0,
+        "period": 1.0,
+        "impacts": []
+      },
+      {
+        "name": "Рабочая станция-1",
+        "own_failure_rate": 0.05,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Фишинг / вредоносное ПО",
+            "intensity": 0.3,
+            "defeat_probability": 0.4
+          },
+          {
+            "name": "DDoS-атака",
+            "intensity": 0.5,
+            "defeat_probability": 0.1
+          }
+        ]
+      },
+      {
+        "name": "Сервер-1",
+        "own_failure_rate": 0.01,
+        "recovery_rate": 4.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 2.0,
+            "defeat_probability": 0.3
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.1,
+            "defeat_probability": 0.7
+          }
+        ]
+      }
+    ],
+    "links": [
+      [
+        "Узел-1",
+        "Рабочая станция-1"
+      ],
+      [
+        "Рабочая станция-1",
+        "Сервер-1"
+      ]
+    ],
+    "w_def": 0.5,
+    "target": "node_fraction",
+    "monte_carlo_runs": 100000
+  },
+  "gui": {
+    "nodes": {
+      "Узел-1": {
+        "shape": "diamond",
+        "color": "#55ffff"
+      },
+      "Рабочая станция-1": {
+        "role": "Рабочая станция"
+      },
+      "Сервер-1": {
+        "role": "Сервер",
+        "color": "#ff007f"
+      }
+    },
+    "link_labels": [
+      {
+        "a": "Рабочая станция-1",
+        "b": "Сервер-1",
+        "label": "daadadsad"
+      },
+      {
+        "a": "Узел-1",
+        "b": "Рабочая станция-1",
+        "label": "hjhjjggj"
+      }
+    ],
+    "positions": {
+      "Узел-1": [
+        238.0,
+        455.0
+      ],
+      "Рабочая станция-1": [
+        625.0,
+        224.0
+      ],
+      "Сервер-1": [
+        1066.0,
+        337.0
+      ]
+    }
+  }
+}

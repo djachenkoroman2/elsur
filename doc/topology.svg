@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1105" height="553" viewBox="0 0 1105 553" font-family="Segoe UI, Arial, sans-serif">
+  <style>.t { font-size:13px; fill:#111; } .s { font-size:11px; fill:#222; } .e { stroke:#666; stroke-width:2; } .tt { font-size:16px; font-weight:bold; fill:#111; } .lg { font-size:11px; fill:#333; } .lbl { font-size:11px; fill:#333; stroke:#fff; stroke-width:3px; paint-order:stroke; }</style>
+  <text x="20" y="28" class="tt">Топология: Новая система</text>
+  <line x1="211" y1="393" x2="598" y2="166" class="e"/>
+  <text x="404" y="276" text-anchor="middle" class="lbl">hjhjjggj</text>
+  <line x1="598" y1="166" x2="915" y2="415" class="e"/>
+  <text x="756" y="286" text-anchor="middle" class="lbl">daadadsad</text>
+  <polygon points="211,361 284,393 211,425 138,393" fill="#55ffff" stroke="#1155cc" stroke-width="1.5"/>
+  <text x="211" y="390" text-anchor="middle" class="t">Узел-1</text>
+  <rect x="533" y="142" width="130" height="48" rx="9" fill="#cfe2f3" stroke="#1155cc" stroke-width="1.5"/>
+  <text x="598" y="163" text-anchor="middle" class="t">Рабочая станция-1</text>
+  <rect x="850" y="391" width="130" height="48" rx="9" fill="#ff007f" stroke="#1155cc" stroke-width="1.5"/>
+  <text x="915" y="412" text-anchor="middle" class="t">Сервер-1</text>
+</svg>

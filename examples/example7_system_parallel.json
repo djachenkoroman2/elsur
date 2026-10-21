@@ -1,0 +1,43 @@
+{
+  "system": {
+    "name": "Два резервных сервера",
+    "nodes": [
+      {
+        "name": "Клиент",
+        "own_failure_rate": 0.05,
+        "recovery_rate": 1.0,
+        "period": 1.0,
+        "impacts": [
+          {"name": "Целевой фишинг операторов", "intensity": 0.3, "defeat_probability": 0.4},
+          {"name": "Заражение вредоносным ПО", "intensity": 0.2, "defeat_probability": 0.6}
+        ]
+      },
+      {
+        "name": "Сервер А (основной)",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {"name": "DDoS-атака", "intensity": 1.5, "defeat_probability": 0.4},
+          {"name": "Внедрение вредоносного кода", "intensity": 0.05, "defeat_probability": 0.9},
+          {"name": "Отказ канала связи", "intensity": 0.3, "defeat_probability": 0.6}
+        ]
+      },
+      {
+        "name": "Сервер Б (резервный)",
+        "own_failure_rate": 0.03,
+        "recovery_rate": 1.5,
+        "period": 1.0,
+        "impacts": [
+          {"name": "DDoS-атака", "intensity": 1.5, "defeat_probability": 0.5},
+          {"name": "Внедрение вредоносного кода", "intensity": 0.05, "defeat_probability": 0.8},
+          {"name": "Отказ канала связи", "intensity": 0.3, "defeat_probability": 0.5}
+        ]
+      }
+    ],
+    "links": [["Клиент", "Сервер А (основной)"], ["Клиент", "Сервер Б (резервный)"]],
+    "w_def": 0.3333333333333333,
+    "target": "connectivity",
+    "seed": 42
+  }
+}

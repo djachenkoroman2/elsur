@@ -1,0 +1,14 @@
+{
+  "name": "Центр обработки данных",
+  "own_failure_rate": 0.01,
+  "recovery_rate": 6.0,
+  "period": 1.0,
+  "impacts": [
+    {"name": "Массовая DDoS-атака (внешний Н1–Н2)", "intensity": 3.0, "defeat_probability": 0.25},
+    {"name": "Целевой фишинг операторов (внешний Н3)", "intensity": 0.3, "defeat_probability": 0.6},
+    {"name": "APT / радиоэлектронное подавление (внешний Н4)", "intensity": 0.05, "defeat_probability": 0.9},
+    {"name": "НСД с АРМ бывшего работника (внутренний Н1–Н2)", "intensity": 0.5, "defeat_probability": 0.4},
+    {"name": "Закладка в ПО при поставке (внутренний Н4)", "intensity": 0.02, "defeat_probability": 0.95},
+    {"name": "Отказ канала связи", "intensity": 0.4, "defeat_probability": 0.5}
+  ]
+}

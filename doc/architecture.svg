@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="700" viewBox="0 0 920 700" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <style>
+    .layer { fill:#f7f7f7; stroke:#999; stroke-width:1.2; rx:12; }
+    .term { fill:#d9ead3; stroke:#38761d; }
+    .proc { fill:#cfe2f3; stroke:#1155cc; }
+    .io   { fill:#fce5cd; stroke:#b45f06; }
+    .note { fill:#fff2cc; stroke:#bf9000; }
+    .box  { stroke-width:1.5; rx:9; }
+    .txt  { font-size:15px; fill:#111; }
+    .sm   { font-size:12.5px; fill:#111; }
+    .lt   { font-size:13px; fill:#333; font-weight:bold; }
+    .edge { stroke:#333; stroke-width:1.5; fill:none; marker-end:url(#arrow); }
+    .lbl  { font-size:12px; fill:#333; }
+  </style>
+
+  <text x="460" y="30" text-anchor="middle" class="txt" font-weight="bold">Архитектура приложения survivability: три слоя</text>
+
+  <!-- Слой 1: GUI -->
+  <rect x="40" y="55" width="700" height="150" class="layer"/>
+  <text x="60" y="80" class="lt">Слой 1. Графическая оболочка — survivability/gui.py (PyQt6 / PySide6)</text>
+  <rect x="60" y="95"  width="150" height="55" class="box proc"/>
+  <text x="135" y="118" text-anchor="middle" class="sm">MainWindow</text>
+  <text x="135" y="134" text-anchor="middle" class="sm">состояние проекта,</text>
+  <text x="135" y="148" text-anchor="middle" class="sm">меню, вкладки</text>
+  <rect x="225" y="95" width="150" height="55" class="box proc"/>
+  <text x="300" y="118" text-anchor="middle" class="sm">TopologyCanvas</text>
+  <text x="300" y="134" text-anchor="middle" class="sm">канвас: drag, связи,</text>
+  <text x="300" y="148" text-anchor="middle" class="sm">меню, подписи</text>
+  <rect x="390" y="95" width="150" height="55" class="box proc"/>
+  <text x="465" y="118" text-anchor="middle" class="sm">Диалоги</text>
+  <text x="465" y="134" text-anchor="middle" class="sm">AddNode / Roles /</text>
+  <text x="465" y="148" text-anchor="middle" class="sm">Impacts / LinkLabel</text>
+  <rect x="555" y="95" width="165" height="55" class="box proc"/>
+  <text x="637" y="118" text-anchor="middle" class="sm">CalcWorker (QThread)</text>
+  <text x="637" y="134" text-anchor="middle" class="sm">фоновый расчёт,</text>
+  <text x="637" y="148" text-anchor="middle" class="sm">сигналы done/failed</text>
+  <text x="390" y="185" text-anchor="middle" class="lbl">запуск: python -m survivability.gui</text>
+
+  <path class="edge" d="M390,205 L390,240"/>
+
+  <!-- Слой 2: кодек -->
+  <rect x="40" y="240" width="700" height="150" class="layer"/>
+  <text x="60" y="265" class="lt">Слой 2. Кодек проекта — survivability/project_codec.py (без Qt)</text>
+  <rect x="60" y="280" width="200" height="55" class="box io"/>
+  <text x="160" y="303" text-anchor="middle" class="sm">Модель ↔ словарь</text>
+  <text x="160" y="319" text-anchor="middle" class="sm">project_to_dict, *_to_dict</text>
+  <text x="160" y="333" text-anchor="middle" class="sm">round-trip с io.*_from_dict</text>
+  <rect x="275" y="280" width="200" height="55" class="box io"/>
+  <text x="375" y="303" text-anchor="middle" class="sm">Секция gui (метаданные)</text>
+  <text x="375" y="319" text-anchor="middle" class="sm">роли, позиции, цвета,</text>
+  <text x="375" y="333" text-anchor="middle" class="sm">фигуры, подписи каналов</text>
+  <rect x="490" y="280" width="230" height="55" class="box io"/>
+  <text x="605" y="303" text-anchor="middle" class="sm">Рендереры без зависимостей</text>
+  <text x="605" y="319" text-anchor="middle" class="sm">topology_svg — схема сети</text>
+  <text x="605" y="333" text-anchor="middle" class="sm">topology_dot — Graphviz</text>
+  <text x="390" y="370" text-anchor="middle" class="lbl">единая точка сериализации; тестируется без QApplication</text>
+
+  <path class="edge" d="M390,390 L390,425"/>
+
+  <!-- Слой 3: ядро -->
+  <rect x="40" y="425" width="700" height="150" class="layer"/>
+  <text x="60" y="450" class="lt">Слой 3. Ядро — стандартная библиотека Python 3.11+ (без Qt и без секции gui)</text>
+  <rect x="60"  y="465" width="105" height="55" class="box proc"/>
+  <text x="112" y="488" text-anchor="middle" class="sm">model.py</text>
+  <text x="112" y="504" text-anchor="middle" class="sm">данные +</text>
+  <text x="112" y="518" text-anchor="middle" class="sm">валидация</text>
+  <rect x="178" y="465" width="95" height="55" class="box proc"/>
+  <text x="225" y="488" text-anchor="middle" class="sm">calc.py</text>
+  <text x="225" y="504" text-anchor="middle" class="sm">Q_i, K,</text>
+  <text x="225" y="518" text-anchor="middle" class="sm">вклады</text>
+  <rect x="286" y="465" width="120" height="55" class="box proc"/>
+  <text x="346" y="488" text-anchor="middle" class="sm">system_calc.py</text>
+  <text x="346" y="504" text-anchor="middle" class="sm">Q(S): перебор /</text>
+  <text x="346" y="518" text-anchor="middle" class="sm">Монте-Карло, I_i</text>
+  <rect x="419" y="465" width="110" height="55" class="box proc"/>
+  <text x="474" y="488" text-anchor="middle" class="sm">protection.py</text>
+  <text x="474" y="504" text-anchor="middle" class="sm">варианты, бюджет,</text>
+  <text x="474" y="518" text-anchor="middle" class="sm">выбор g*</text>
+  <rect x="542" y="465" width="85" height="55" class="box proc"/>
+  <text x="584" y="488" text-anchor="middle" class="sm">io.py</text>
+  <text x="584" y="504" text-anchor="middle" class="sm">парсеры,</text>
+  <text x="584" y="518" text-anchor="middle" class="sm">отчёты, CSV</text>
+  <rect x="640" y="465" width="80" height="55" class="box proc"/>
+  <text x="680" y="488" text-anchor="middle" class="sm">cli.py</text>
+  <text x="680" y="504" text-anchor="middle" class="sm">argparse,</text>
+  <text x="680" y="518" text-anchor="middle" class="sm">коды возврата</text>
+  <text x="390" y="600" text-anchor="middle" class="lbl">запуск: python -m survivability [--demo | --file JSON] [--output FILE] [--seed N]</text>
+
+  <!-- Подписи стрелок -->
+  <text x="405" y="228" class="lbl">импортирует, вызывает</text>
+  <text x="405" y="413" class="lbl">модели → словари → модели</text>
+
+  <!-- Примечание: инвариант -->
+  <rect x="755" y="240" width="150" height="150" class="box note"/>
+  <text x="830" y="265" text-anchor="middle" class="sm" font-weight="bold">Инвариант</text>
+  <text x="830" y="290" text-anchor="middle" class="sm">слои 2–3</text>
+  <text x="830" y="306" text-anchor="middle" class="sm">не импортируют Qt:</text>
+  <text x="830" y="330" text-anchor="middle" class="sm">ядро работает на</text>
+  <text x="830" y="346" text-anchor="middle" class="sm">сервере без GUI,</text>
+  <text x="830" y="370" text-anchor="middle" class="sm">проверяется тестом</text>
+
+  <!-- Тесты -->
+  <rect x="755" y="55" width="150" height="150" class="box term"/>
+  <text x="830" y="80" text-anchor="middle" class="sm" font-weight="bold">tests/</text>
+  <text x="830" y="105" text-anchor="middle" class="sm">123 теста</text>
+  <text x="830" y="125" text-anchor="middle" class="sm">unittest;</text>
+  <text x="830" y="145" text-anchor="middle" class="sm">ядро и кодек —</text>
+  <text x="830" y="161" text-anchor="middle" class="sm">без PyQt</text>
+  <text x="830" y="185" text-anchor="middle" class="sm">(блокировка</text>
+  <text x="830" y="201" text-anchor="middle" class="sm">sys.modules)</text>
+</svg>

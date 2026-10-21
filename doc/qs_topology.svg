@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="612" viewBox="0 0 1000 612" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <style>
+    .term { fill:#d9ead3; stroke:#38761d; }
+    .proc { fill:#cfe2f3; stroke:#1155cc; }
+    .io   { fill:#fce5cd; stroke:#b45f06; }
+    .dec  { fill:#fff2cc; stroke:#bf9000; }
+    .err  { fill:#f4cccc; stroke:#cc0000; }
+    .box  { stroke-width:1.5; rx:10; }
+    .node { stroke-width:1.5; rx:10; }
+    .txt  { font-size:14px; fill:#111; }
+    .sm   { font-size:12px; fill:#111; }
+    .lbl  { font-size:12px; fill:#333; }
+    .edge { stroke:#333; stroke-width:1.5; fill:none; marker-end:url(#arrow); }
+    .link { stroke:#333; stroke-width:2; fill:none; }
+    .dash { stroke:#cc0000; stroke-width:1.5; fill:none; stroke-dasharray:6 4; }
+  </style>
+
+  <text x="500" y="30" text-anchor="middle" class="txt" font-weight="bold">Расчёт Q(S) с учётом топологии: линия «ЦОИ — Сервер БД — АРМ оператора» (example6_system_line.json, точный перебор)</text>
+
+  <!-- Левая панель: топология -->
+  <text x="215" y="64" text-anchor="middle" class="txt" font-weight="bold">Топология S = ⟨E, L, F⟩</text>
+
+  <rect x="100" y="84" width="230" height="58" class="proc node"/>
+  <text x="215" y="108" text-anchor="middle" class="txt" font-weight="bold">ЦОИ (e₁)</text>
+  <text x="215" y="128" text-anchor="middle" class="sm">Q₁ = 0.838190</text>
+  <text x="340" y="120" text-anchor="start" class="lbl">I₁ = 0.117</text>
+
+  <path d="M215,142 L215,206" class="link"/>
+
+  <rect x="100" y="206" width="230" height="58" class="err node"/>
+  <text x="215" y="228" text-anchor="middle" class="txt" font-weight="bold">Сервер БД (e₂) — точка сочленения</text>
+  <text x="215" y="248" text-anchor="middle" class="sm">Q₂ = 0.720254</text>
+  <text x="340" y="240" text-anchor="start" class="lbl">I₂ = 0.974</text>
+
+  <path d="M215,264 L215,328" class="link"/>
+
+  <rect x="100" y="328" width="230" height="58" class="proc node"/>
+  <text x="215" y="352" text-anchor="middle" class="txt" font-weight="bold">АРМ оператора (e₃)</text>
+  <text x="215" y="372" text-anchor="middle" class="sm">Q₃ = 0.837076</text>
+  <text x="340" y="364" text-anchor="start" class="lbl">I₃ = 0.117</text>
+
+  <rect x="40" y="412" width="390" height="64" class="box" fill="#ffffff" stroke="#cc0000" stroke-dasharray="6 4"/>
+  <text x="235" y="436" text-anchor="middle" class="sm">Отказ Сервера БД: ЦОИ и АРМ работоспособны,</text>
+  <text x="235" y="454" text-anchor="middle" class="sm">но путь между ними отсутствует → W((101)) = 0</text>
+  <text x="235" y="470" text-anchor="middle" class="sm">(в треугольнике с резервной связью W((101)) = 1/3)</text>
+
+  <!-- Правая панель: таблица состояний -->
+  <text x="690" y="64" text-anchor="middle" class="txt" font-weight="bold">Перебор 2³ = 8 состояний, W_доп = 1/3</text>
+
+  <rect x="450" y="78" width="480" height="28" class="proc box"/>
+  <text x="480" y="97" text-anchor="middle" class="sm" font-weight="bold">X</text>
+  <text x="588" y="97" text-anchor="middle" class="sm" font-weight="bold">работоспособны</text>
+  <text x="708" y="97" text-anchor="middle" class="sm" font-weight="bold">P(X)</text>
+  <text x="792" y="97" text-anchor="middle" class="sm" font-weight="bold">W(X)</text>
+  <text x="882" y="97" text-anchor="middle" class="sm" font-weight="bold">допустим</text>
+
+  <rect x="450" y="106" width="480" height="28" fill="#ffffff" stroke="#bbbbbb" stroke-width="0.5"/>
+  <text x="480" y="125" text-anchor="middle" class="sm">(000)</text><text x="588" y="125" text-anchor="middle" class="sm">—</text><text x="708" y="125" text-anchor="middle" class="sm">0.007375</text><text x="792" y="125" text-anchor="middle" class="sm">0.000000</text><text x="882" y="125" text-anchor="middle" class="sm">нет</text>
+  <rect x="450" y="134" width="480" height="28" fill="#ffffff" stroke="#bbbbbb" stroke-width="0.5"/>
+  <text x="480" y="153" text-anchor="middle" class="sm">(100)</text><text x="588" y="153" text-anchor="middle" class="sm">ЦОИ</text><text x="708" y="153" text-anchor="middle" class="sm">0.038202</text><text x="792" y="153" text-anchor="middle" class="sm">0.000000</text><text x="882" y="153" text-anchor="middle" class="sm">нет</text>
+  <rect x="450" y="162" width="480" height="28" fill="#ffffff" stroke="#bbbbbb" stroke-width="0.5"/>
+  <text x="480" y="181" text-anchor="middle" class="sm">(010)</text><text x="588" y="181" text-anchor="middle" class="sm">Сервер БД</text><text x="708" y="181" text-anchor="middle" class="sm">0.018988</text><text x="792" y="181" text-anchor="middle" class="sm">0.000000</text><text x="882" y="181" text-anchor="middle" class="sm">нет</text>
+  <rect x="450" y="190" width="480" height="28" class="term" stroke="#38761d" stroke-width="0.5"/>
+  <text x="480" y="209" text-anchor="middle" class="sm">(110)</text><text x="588" y="209" text-anchor="middle" class="sm">ЦОИ + Сервер БД</text><text x="708" y="209" text-anchor="middle" class="sm">0.098359</text><text x="792" y="209" text-anchor="middle" class="sm">0.333333</text><text x="882" y="209" text-anchor="middle" class="sm" font-weight="bold">да</text>
+  <rect x="450" y="218" width="480" height="28" fill="#ffffff" stroke="#bbbbbb" stroke-width="0.5"/>
+  <text x="480" y="237" text-anchor="middle" class="sm">(001)</text><text x="588" y="237" text-anchor="middle" class="sm">АРМ оператора</text><text x="708" y="237" text-anchor="middle" class="sm">0.037891</text><text x="792" y="237" text-anchor="middle" class="sm">0.000000</text><text x="882" y="237" text-anchor="middle" class="sm">нет</text>
+  <rect x="450" y="246" width="480" height="28" class="err" stroke="#cc0000" stroke-width="0.5"/>
+  <text x="480" y="265" text-anchor="middle" class="sm" font-weight="bold">(101)</text><text x="588" y="265" text-anchor="middle" class="sm">ЦОИ + АРМ, пути нет</text><text x="708" y="265" text-anchor="middle" class="sm">0.196278</text><text x="792" y="265" text-anchor="middle" class="sm">0.000000</text><text x="882" y="265" text-anchor="middle" class="sm" font-weight="bold">нет</text>
+  <rect x="450" y="274" width="480" height="28" class="term" stroke="#38761d" stroke-width="0.5"/>
+  <text x="480" y="293" text-anchor="middle" class="sm">(011)</text><text x="588" y="293" text-anchor="middle" class="sm">Сервер БД + АРМ</text><text x="708" y="293" text-anchor="middle" class="sm">0.097556</text><text x="792" y="293" text-anchor="middle" class="sm">0.333333</text><text x="882" y="293" text-anchor="middle" class="sm" font-weight="bold">да</text>
+  <rect x="450" y="302" width="480" height="28" class="term" stroke="#38761d" stroke-width="0.5"/>
+  <text x="480" y="321" text-anchor="middle" class="sm">(111)</text><text x="588" y="321" text-anchor="middle" class="sm">все узлы</text><text x="708" y="321" text-anchor="middle" class="sm">0.505351</text><text x="792" y="321" text-anchor="middle" class="sm">1.000000</text><text x="882" y="321" text-anchor="middle" class="sm" font-weight="bold">да</text>
+
+  <text x="690" y="352" text-anchor="middle" class="lbl">зелёным — допустимые состояния; красным — ключевое недопустимое состояние (101)</text>
+
+  <!-- Нижняя панель: сумма -->
+  <rect x="40" y="498" width="920" height="44" class="io box"/>
+  <text x="500" y="526" text-anchor="middle" class="txt" font-weight="bold">Q(S) = Σ P(X) по допустимым состояниям = 0.098359 + 0.097556 + 0.505351 = 0.701266</text>
+
+  <text x="500" y="560" text-anchor="middle" class="lbl">те же узлы Q_i — меняются только связи и вид W(X):</text>
+  <rect x="40" y="570" width="270" height="34" class="proc box"/>
+  <text x="175" y="592" text-anchor="middle" class="sm">линия (2 связи): Q(S) = 0.701266</text>
+  <path d="M318,587 L368,587" class="edge"/>
+  <rect x="376" y="570" width="280" height="34" class="proc box"/>
+  <text x="516" y="592" text-anchor="middle" class="sm">треугольник (3 связи): Q(S) = 0.897544</text>
+  <path d="M664,587 L714,587" class="edge"/>
+  <rect x="722" y="570" width="238" height="34" class="proc box"/>
+  <text x="841" y="592" text-anchor="middle" class="sm">node_fraction: Q(S) = 0.992625</text>
+</svg>

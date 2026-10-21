@@ -1,0 +1,11 @@
+{
+  "name": "Сервер маршрутизации",
+  "own_failure_rate": 0.02,
+  "recovery_rate": 2.0,
+  "period": 24.0,
+  "impacts": [
+    {"name": "DDoS-атака", "intensity": 1.5, "defeat_probability": 0.4},
+    {"name": "Внедрение вредоносного кода", "intensity": 0.05, "defeat_probability": 0.9},
+    {"name": "Отказ канала связи", "intensity": 0.3, "defeat_probability": 0.6}
+  ]
+}

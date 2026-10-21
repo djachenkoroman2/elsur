@@ -1,0 +1,910 @@
+{
+  "system": {
+    "name": "Кольцевая сеть ЦОИ (22 сегмента)",
+    "nodes": [
+      {
+        "name": "Сегмент-00",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-01",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-02",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-03",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-04",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-05",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-06",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-07",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-08",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-09",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-10",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-11",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-12",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-13",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-14",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-15",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-16",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-17",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-18",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-19",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-20",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Сегмент-21",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Массовая DDoS-атака",
+            "intensity": 0.8,
+            "defeat_probability": 0.25
+          },
+          {
+            "name": "Целевая кибератака",
+            "intensity": 0.05,
+            "defeat_probability": 0.5
+          }
+        ]
+      }
+    ],
+    "links": [
+      [
+        "Сегмент-00",
+        "Сегмент-01"
+      ],
+      [
+        "Сегмент-01",
+        "Сегмент-02"
+      ],
+      [
+        "Сегмент-02",
+        "Сегмент-03"
+      ],
+      [
+        "Сегмент-03",
+        "Сегмент-04"
+      ],
+      [
+        "Сегмент-04",
+        "Сегмент-05"
+      ],
+      [
+        "Сегмент-05",
+        "Сегмент-06"
+      ],
+      [
+        "Сегмент-06",
+        "Сегмент-07"
+      ],
+      [
+        "Сегмент-07",
+        "Сегмент-08"
+      ],
+      [
+        "Сегмент-08",
+        "Сегмент-09"
+      ],
+      [
+        "Сегмент-09",
+        "Сегмент-10"
+      ],
+      [
+        "Сегмент-10",
+        "Сегмент-11"
+      ],
+      [
+        "Сегмент-11",
+        "Сегмент-12"
+      ],
+      [
+        "Сегмент-12",
+        "Сегмент-13"
+      ],
+      [
+        "Сегмент-13",
+        "Сегмент-14"
+      ],
+      [
+        "Сегмент-14",
+        "Сегмент-15"
+      ],
+      [
+        "Сегмент-15",
+        "Сегмент-16"
+      ],
+      [
+        "Сегмент-16",
+        "Сегмент-17"
+      ],
+      [
+        "Сегмент-17",
+        "Сегмент-18"
+      ],
+      [
+        "Сегмент-18",
+        "Сегмент-19"
+      ],
+      [
+        "Сегмент-19",
+        "Сегмент-20"
+      ],
+      [
+        "Сегмент-20",
+        "Сегмент-21"
+      ],
+      [
+        "Сегмент-21",
+        "Сегмент-00"
+      ]
+    ],
+    "w_def": 0.5,
+    "target": "connectivity",
+    "monte_carlo_runs": 50000,
+    "seed": 42
+  },
+  "protection": {
+    "budget": 50,
+    "variants": [
+      {
+        "name": "СОВ и фильтрация на всех сегментах",
+        "cost": 60,
+        "nodes": {
+          "Сегмент-00": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-01": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-02": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-03": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-04": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-05": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-06": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-07": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-08": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-09": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-10": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-11": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-12": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-13": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-14": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-15": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-16": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-17": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-18": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-19": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-20": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          },
+          "Сегмент-21": {
+            "impacts": [
+              {
+                "name": "Массовая DDoS-атака",
+                "intensity": 0.8,
+                "defeat_probability": 0.05
+              },
+              {
+                "name": "Целевая кибератака",
+                "intensity": 0.05,
+                "defeat_probability": 0.1
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Резервные хорды (4 канала)",
+        "cost": 30,
+        "links_added": [
+          [
+            "Сегмент-00",
+            "Сегмент-05"
+          ],
+          [
+            "Сегмент-05",
+            "Сегмент-10"
+          ],
+          [
+            "Сегмент-11",
+            "Сегмент-16"
+          ],
+          [
+            "Сегмент-16",
+            "Сегмент-21"
+          ]
+        ]
+      },
+      {
+        "name": "Ускоренное восстановление",
+        "cost": 45,
+        "nodes": {
+          "Сегмент-00": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-01": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-02": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-03": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-04": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-05": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-06": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-07": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-08": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-09": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-10": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-11": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-12": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-13": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-14": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-15": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-16": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-17": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-18": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-19": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-20": {
+            "recovery_rate": 6.0
+          },
+          "Сегмент-21": {
+            "recovery_rate": 6.0
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "system": {
+    "name": "ЦОИ — цепочка с вариантами защиты",
+    "nodes": [
+      {
+        "name": "ЦОИ",
+        "own_failure_rate": 0.01,
+        "recovery_rate": 4.0,
+        "period": 1.0,
+        "impacts": [
+          {"name": "Массовая DDoS-атака (Н1–Н2)", "intensity": 2.0, "defeat_probability": 0.30},
+          {"name": "Целевая кибератака (Н3)", "intensity": 0.1, "defeat_probability": 0.70},
+          {"name": "РЭП / разрыв канала (Н4)", "intensity": 0.2, "defeat_probability": 0.50}
+        ]
+      },
+      {
+        "name": "Сервер БД",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 2.0,
+        "period": 1.0,
+        "impacts": [
+          {"name": "DDoS-атака", "intensity": 1.5, "defeat_probability": 0.4},
+          {"name": "Внедрение вредоносного кода", "intensity": 0.05, "defeat_probability": 0.9},
+          {"name": "Отказ канала связи", "intensity": 0.3, "defeat_probability": 0.6}
+        ]
+      },
+      {
+        "name": "АРМ оператора",
+        "own_failure_rate": 0.05,
+        "recovery_rate": 1.0,
+        "period": 1.0,
+        "impacts": [
+          {"name": "Целевой фишинг операторов", "intensity": 0.3, "defeat_probability": 0.4},
+          {"name": "Заражение вредоносным ПО", "intensity": 0.2, "defeat_probability": 0.6}
+        ]
+      }
+    ],
+    "links": [["ЦОИ", "Сервер БД"], ["Сервер БД", "АРМ оператора"]],
+    "w_def": 0.3333333333333333,
+    "target": "connectivity",
+    "seed": 42
+  },
+  "protection": {
+    "budget": 50,
+    "variants": [
+      {
+        "name": "Экранирование ЦОИ",
+        "cost": 25,
+        "nodes": {
+          "ЦОИ": {
+            "impacts": [
+              {"name": "Массовая DDoS-атака (Н1–Н2)", "intensity": 2.0, "defeat_probability": 0.10},
+              {"name": "Целевая кибератака (Н3)", "intensity": 0.1, "defeat_probability": 0.30},
+              {"name": "РЭП / разрыв канала (Н4)", "intensity": 0.2, "defeat_probability": 0.30}
+            ]
+          }
+        }
+      },
+      {
+        "name": "Резервный канал ЦОИ–АРМ",
+        "cost": 40,
+        "links_added": [["ЦОИ", "АРМ оператора"]]
+      },
+      {
+        "name": "Комплексная защита",
+        "cost": 70,
+        "nodes": {
+          "ЦОИ": {
+            "impacts": [
+              {"name": "Массовая DDoS-атака (Н1–Н2)", "intensity": 2.0, "defeat_probability": 0.10},
+              {"name": "Целевая кибератака (Н3)", "intensity": 0.1, "defeat_probability": 0.30},
+              {"name": "РЭП / разрыв канала (Н4)", "intensity": 0.2, "defeat_probability": 0.30}
+            ]
+          },
+          "АРМ оператора": {
+            "impacts": [
+              {"name": "Целевой фишинг операторов", "intensity": 0.3, "defeat_probability": 0.2},
+              {"name": "Заражение вредоносным ПО", "intensity": 0.2, "defeat_probability": 0.3}
+            ]
+          }
+        },
+        "links_added": [["ЦОИ", "АРМ оператора"]]
+      }
+    ]
+  }
+}

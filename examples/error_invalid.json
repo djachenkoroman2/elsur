@@ -1,0 +1,9 @@
+{
+  "name": "Узел с ошибкой в данных",
+  "own_failure_rate": 0.1,
+  "recovery_rate": 1.0,
+  "period": 24.0,
+  "impacts": [
+    {"name": "DDoS-атака", "intensity": 1.0, "defeat_probability": 1.5}
+  ]
+}

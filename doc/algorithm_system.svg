@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="900" viewBox="0 0 760 900" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <style>
+    .term { fill:#d9ead3; stroke:#38761d; }
+    .proc { fill:#cfe2f3; stroke:#1155cc; }
+    .io   { fill:#fce5cd; stroke:#b45f06; }
+    .dec  { fill:#fff2cc; stroke:#bf9000; }
+    .err  { fill:#f4cccc; stroke:#cc0000; }
+    .box  { stroke-width:1.5; rx:10; }
+    .txt  { font-size:14px; fill:#111; }
+    .sm   { font-size:12px; fill:#111; }
+    .edge { stroke:#333; stroke-width:1.5; fill:none; marker-end:url(#arrow); }
+    .lbl  { font-size:12px; fill:#333; }
+  </style>
+
+  <text x="380" y="28" text-anchor="middle" class="txt" font-weight="bold">Расчёт живучести системы Q(S) и выбор способа защиты g*</text>
+
+  <!-- Общая часть -->
+  <rect x="250" y="50" width="260" height="40" rx="18" class="term box"/>
+  <text x="380" y="75" text-anchor="middle" class="txt">Начало</text>
+
+  <rect x="190" y="115" width="380" height="44" class="io box"/>
+  <text x="380" y="133" text-anchor="middle" class="txt">Ввод JSON (--file): распознавание режима</text>
+  <text x="380" y="150" text-anchor="middle" class="sm">есть ключ system → система; иначе → одиночный узел (algorithm.svg)</text>
+
+  <path d="M380,159 L380,190" class="edge"/>
+
+  <path d="M380,190 L470,225 L380,260 L290,225 Z" class="dec box"/>
+  <text x="380" y="229" text-anchor="middle" class="txt">ключ system?</text>
+
+  <!-- Ветка «нет» — одиночный узел -->
+  <path d="M290,225 L120,225" class="edge"/>
+  <text x="175" y="215" text-anchor="middle" class="lbl">нет</text>
+  <rect x="30" y="255" width="180" height="56" class="io box"/>
+  <text x="120" y="278" text-anchor="middle" class="sm">Расчёт живучести узла</text>
+  <text x="120" y="296" text-anchor="middle" class="sm">(схема algorithm.svg)</text>
+  <path d="M120,225 L120,255" class="edge"/>
+
+  <!-- Ветка «да» -->
+  <text x="400" y="215" text-anchor="middle" class="lbl">да</text>
+  <path d="M380,260 L380,290" class="edge"/>
+  <rect x="215" y="290" width="330" height="44" class="proc box"/>
+  <text x="380" y="308" text-anchor="middle" class="txt">Сборка SystemInput, валидация</text>
+  <text x="380" y="325" text-anchor="middle" class="sm">узлы, связи, W_доп, target</text>
+
+  <path d="M380,334 L380,365" class="edge"/>
+  <path d="M380,365 L470,400 L380,435 L290,400 Z" class="dec box"/>
+  <text x="380" y="396" text-anchor="middle" class="txt">ключ</text>
+  <text x="380" y="413" text-anchor="middle" class="txt">protection?</text>
+
+  <!-- Режим Q(S) -->
+  <text x="355" y="390" text-anchor="middle" class="lbl">нет</text>
+  <path d="M380,435 L380,465" class="edge"/>
+  <path d="M380,465 L470,500 L380,535 L290,500 Z" class="dec box"/>
+  <text x="380" y="505" text-anchor="middle" class="txt">n ≤ 20?</text>
+
+  <text x="360" y="490" text-anchor="middle" class="lbl">да</text>
+  <path d="M290,500 L170,500" class="edge"/>
+  <rect x="60" y="480" width="110" height="40" class="proc box"/>
+  <text x="115" y="505" text-anchor="middle" class="sm">Точный перебор</text>
+
+  <text x="400" y="490" text-anchor="middle" class="lbl">нет</text>
+  <path d="M470,500 L590,500" class="edge"/>
+  <rect x="590" y="470" width="150" height="60" class="proc box"/>
+  <text x="665" y="493" text-anchor="middle" class="sm">Монте-Карло,</text>
+  <text x="665" y="509" text-anchor="middle" class="sm">N прогонов,</text>
+  <text x="665" y="525" text-anchor="middle" class="sm">ДИ Уилсона 95 %</text>
+
+  <path d="M115,520 L115,570 L330,570" class="edge"/>
+  <path d="M665,530 L665,570 L430,570" class="edge"/>
+  <rect x="330" y="570" width="100" height="40" class="proc box" transform="translate(0,0)"/>
+  <text x="380" y="588" text-anchor="middle" class="sm">Важность узлов</text>
+  <text x="380" y="604" text-anchor="middle" class="sm">(критичность)</text>
+
+  <!-- Режим выбора защиты -->
+  <text x="400" y="445" text-anchor="middle" class="lbl">да</text>
+  <path d="M470,400 L560,400" class="edge"/>
+  <rect x="560" y="375" width="185" height="50" class="proc box"/>
+  <text x="652" y="395" text-anchor="middle" class="sm">Для каждого g: допустимость</text>
+  <text x="652" y="412" text-anchor="middle" class="sm">C(g) ≤ C_доп</text>
+
+  <path d="M652,425 L652,455" class="edge"/>
+  <rect x="555" y="455" width="195" height="50" class="proc box"/>
+  <text x="652" y="475" text-anchor="middle" class="sm">Оценка Q_g(S): перебор / МК</text>
+  <text x="652" y="492" text-anchor="middle" class="sm">общий поток случайных чисел</text>
+
+  <path d="M652,505 L652,535" class="edge"/>
+  <path d="M652,535 L735,570 L652,605 L569,570 Z" class="dec box"/>
+  <text x="652" y="566" text-anchor="middle" class="sm">есть допустимые?</text>
+  <text x="652" y="582" text-anchor="middle" class="sm">варианты</text>
+
+  <text x="700" y="628" text-anchor="middle" class="lbl">нет</text>
+  <path d="M652,605 L652,635" class="edge"/>
+  <rect x="540" y="635" width="224" height="40" class="err box"/>
+  <text x="652" y="659" text-anchor="middle" class="sm">Ошибка: бюджет не позволяет (код 2)</text>
+
+  <text x="600" y="550" text-anchor="middle" class="lbl">да</text>
+  <path d="M569,570 L470,570 L470,635" class="edge"/>
+  <rect x="345" y="635" width="250" height="50" class="proc box"/>
+  <text x="470" y="655" text-anchor="middle" class="sm">g* = arg max Q_g(S); ΔQ,</text>
+  <text x="472" y="672" text-anchor="middle" class="sm">относительный прирост, эфф. затрат</text>
+
+  <path d="M470,685 L470,715" class="edge"/>
+  <rect x="330" y="715" width="280" height="40" class="io box"/>
+  <text x="470" y="733" text-anchor="middle" class="txt">Сводный отчёт по вариантам, экспорт</text>
+  <text x="470" y="749" text-anchor="middle" class="sm">g*, Q_g(S), ДИ, C(g)</text>
+
+  <path d="M380,610 L380,715" class="edge"/>
+
+  <path d="M380,755 L380,785" class="edge"/>
+  <rect x="250" y="785" width="260" height="40" rx="18" class="term box"/>
+  <text x="380" y="810" text-anchor="middle" class="txt">Конец</text>
+
+  <!-- Легенда -->
+  <rect x="30" y="850" width="20" height="14" class="term box"/><text x="56" y="862" class="sm">терминатор</text>
+  <rect x="140" y="850" width="20" height="14" class="io box"/><text x="166" y="862" class="sm">ввод/вывод</text>
+  <rect x="250" y="850" width="20" height="14" class="proc box"/><text x="276" y="862" class="sm">расчёт</text>
+  <rect x="350" y="850" width="20" height="14" class="dec box"/><text x="376" y="862" class="sm">ветвление</text>
+  <rect x="460" y="850" width="20" height="14" class="err box"/><text x="486" y="862" class="sm">ошибка ввода</text>
+</svg>
