@@ -1,0 +1,222 @@
+{
+  "system": {
+    "name": "Новая система",
+    "nodes": [
+      {
+        "name": "АРМ1",
+        "own_failure_rate": 0.0,
+        "recovery_rate": 0.0,
+        "period": 1.0,
+        "impacts": []
+      },
+      {
+        "name": "АРМ2",
+        "own_failure_rate": 0.0,
+        "recovery_rate": 0.0,
+        "period": 1.0,
+        "impacts": []
+      },
+      {
+        "name": "АРМ3",
+        "own_failure_rate": 0.0,
+        "recovery_rate": 0.0,
+        "period": 1.0,
+        "impacts": []
+      },
+      {
+        "name": "Маршрутизатор-1",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 6.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "РЭП / разрыв канала",
+            "intensity": 0.2,
+            "defeat_probability": 0.5
+          },
+          {
+            "name": "Перегрузка трафиком",
+            "intensity": 1.0,
+            "defeat_probability": 0.2
+          }
+        ]
+      },
+      {
+        "name": "Коммутатор-1",
+        "own_failure_rate": 0.02,
+        "recovery_rate": 6.0,
+        "period": 1.0,
+        "impacts": [
+          {
+            "name": "Перегрузка трафиком",
+            "intensity": 1.0,
+            "defeat_probability": 0.2
+          },
+          {
+            "name": "Отказ питания",
+            "intensity": 0.05,
+            "defeat_probability": 0.3
+          }
+        ]
+      }
+    ],
+    "links": [
+      [
+        "АРМ1",
+        "АРМ3"
+      ],
+      [
+        "АРМ1",
+        "АРМ2"
+      ],
+      [
+        "АРМ3",
+        "АРМ2"
+      ],
+      [
+        "Коммутатор-1",
+        "АРМ1"
+      ],
+      [
+        "Коммутатор-1",
+        "Маршрутизатор-1"
+      ]
+    ],
+    "w_def": 0.5,
+    "target": "node_fraction",
+    "monte_carlo_runs": 100000
+  },
+  "gui": {
+    "nodes": {
+      "АРМ1": {
+        "shape": "diamond"
+      },
+      "АРМ2": {
+        "shape": "diamond"
+      },
+      "АРМ3": {
+        "shape": "diamond"
+      },
+      "Маршрутизатор-1": {
+        "role": "Маршрутизатор",
+        "shape": "oval",
+        "color": "#ffaa00"
+      },
+      "Коммутатор-1": {
+        "role": "Коммутатор",
+        "color": "#ff0000"
+      }
+    },
+    "link_styles": [
+      {
+        "a": "Коммутатор-1",
+        "b": "Маршрутизатор-1",
+        "style": "dash",
+        "width": 2,
+        "arrow_start": "none",
+        "arrow_end": "none"
+      },
+      {
+        "a": "АРМ1",
+        "b": "АРМ3",
+        "style": "dash",
+        "width": 2,
+        "arrow_start": "arrow",
+        "arrow_end": "arrow"
+      },
+      {
+        "a": "АРМ1",
+        "b": "АРМ2",
+        "style": "dash",
+        "width": 2,
+        "arrow_start": "arrow",
+        "arrow_end": "arrow"
+      },
+      {
+        "a": "АРМ3",
+        "b": "АРМ2",
+        "style": "dash",
+        "width": 2,
+        "arrow_start": "arrow",
+        "arrow_end": "arrow"
+      }
+    ],
+    "link_labels": [
+      {
+        "a": "АРМ1",
+        "b": "АРМ3",
+        "label": "Оптоволокно"
+      },
+      {
+        "a": "АРМ1",
+        "b": "АРМ2",
+        "label": "Оптоволокно"
+      },
+      {
+        "a": "АРМ3",
+        "b": "АРМ2",
+        "label": "Оптоволокно"
+      }
+    ],
+    "positions": {
+      "АРМ1": [
+        671.0,
+        154.0
+      ],
+      "АРМ2": [
+        1303.0,
+        384.0
+      ],
+      "АРМ3": [
+        1140.0,
+        157.0
+      ],
+      "Маршрутизатор-1": [
+        93.0,
+        354.0
+      ],
+      "Коммутатор-1": [
+        333.0,
+        136.0
+      ]
+    }
+  },
+  "protection": {
+    "budget": 0.0,
+    "variants": [
+      {
+        "name": "Вариант-2",
+        "cost": 0.0,
+        "nodes": {
+          "АРМ1": {
+            "own_failure_rate": 0.5,
+            "recovery_rate": 0.5,
+            "impacts": [
+              {
+                "name": "1",
+                "intensity": 0.4,
+                "defeat_probability": 0.3
+              }
+            ]
+          },
+          "АРМ2": {
+            "own_failure_rate": 0.6,
+            "recovery_rate": 0.8
+          },
+          "АРМ3": {
+            "own_failure_rate": 0.6,
+            "recovery_rate": 0.7
+          },
+          "Маршрутизатор-1": {
+            "own_failure_rate": 0.5,
+            "recovery_rate": 0.9
+          },
+          "Коммутатор-1": {
+            "own_failure_rate": 0.5,
+            "recovery_rate": 0.6
+          }
+        }
+      }
+    ]
+  }
+}
